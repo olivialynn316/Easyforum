@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="javascripts/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheets/sweetalert.css"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/base.css"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/forum.css"/>
+    <title>Title</title>
+    <script id="forumTemplate" type="text/x-jquery-tmpl">
+        <tr><td><a href="/content?summary="+ ${summary}s>${summary}</a></td><td>${content}</td><td>${account}</td></tr>
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            initialize();
+
+        });
+
+        // 初始化帖子数据
+        function initialize() {
+            $.ajax({
+                url:'/initialize',
+                type:'post',
+                dataType: "json",
+                success: function(data){
+                    if(data != null) {
+                        console.log(data);
+                        // 填充帖子模板
+                        $('#forumTemplate').tmpl(data).appendTo('#rows');
+                    }
+                },
+                error: function(data) {
+                },
+            });
+
+            $('#poster').click(function (e) {
+                e.preventDefault();
+                var summary = $("#summary").val();
+                var content = $("#content").val();
+                if(summary == null || summary == '') {
+                    swal({
+                        title: "",
+                        text: "请输入标题",
+                        type: "warning",
+                        showConfirmButton: false,
+                        width: 300,
+                        padding: 10,
+                        background: "#F5F5F5",
+                        timer: 1000
+                    });
+                }
+                var forumContent = {"summary": summary, "content": content};
+                $.ajax({
+                    url: '/poster',
+                    type: 'post',
+                    data: forumContent,
+                    success: function (data) {
+                        if (data.status == '30') {
+                            swal({
+                                title: "",
+                                text: "发表成功",
+                                type: "success",
+                                showConfirmButton: false,
+                                timer: 1000
+                            }, function () {
+                                location.reload();
+                            });
+                        } else if (data.status == '20') {
+                            swal({
+                                title: "",
+                                text: "标题重复",
+                                type: "warning",
+                                showConfirmButton: false,
+                                width: 300,
+                                padding: 10,
+                                background: "#F5F5F5",
+                                timer: 1000
+                            });
+                        } else {
+                            swal({
+                                title: "",
+                                text: "发表失败",
+                                type: "error",
+                                showConfirmButton: false,
+                                width: 300,
+                                padding: 10,
+                                background: "#F5F5F5",
+                                timer: 1000
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        swal({
+                            title: "",
+                            text: "发生未知错误",
+                            type: "error",
+                            showConfirmButton: false,
+                            width: 300,
+                            padding: 10,
+                            background: "#F5F5F5",
+                            timer: 1000
+                        });
+                    }
+                });
+            });
+
+        }
+    </script>
+</head>
+
+<body>
+<h1>嘿嘿嘿</h1>
+<div>
+    <table cellspacing="0" cellpadding="3">
+        <tbody id="rows">
+        <tr>
+            <th>标题</th><th>内容</th><th>发帖人</th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="forum-post">
+    <div class="div-s1">
+        <label class="label-s1">标题:</label>
+        <input type="text" id="summary" required="required" class="summary" name="summary" placeholder="请输入标题"/>
+    </div>
+    <div class="div-s1">
+        <label class="label-s1">内容:</label>
+        <input type="text" id="content" name="content" class="content"/>
+    </div>
+    <div class="forum-btn">
+        <button class="btn" type="submit" id="poster">发表</button>
+    </div>
+</div>
+</body>
+</html>
