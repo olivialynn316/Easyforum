@@ -1,5 +1,4 @@
 # Easyforum
-An easy forum using express, nodejs and mongodb
 配置环境：
 1. 下载安装mongodb和node，安装文件在software文件夹里
 2. 在MongoDB的bin文件夹下创建data文件夹
