@@ -9,18 +9,30 @@
 
 h1 {
     margin: 0 auto;
-    margin-left: 60%;
     color: #0768c9;
     letter-spacing: 1px;
-    text-align: center;
     font-size: 2em;
-    display: inline-block;
-    font-size: 2em;
-}
 
+}
+.buttons{
+    text-align:right;
+    margin-right:20%;
+}
+.clear{
+    clear:both;
+}
 .summary {
     width: 35%;
     background-color: #ffffff;
+    padding-top: 10px;
+    padding-left: 2px;
+    padding-bottom: 10px;
+    padding-right: 2px;
+    margin: 5px 0;
+    font-size: 13px;
+    color: #a9a9a9;
+    border: 1px solid #a9a9a9;
+    border-radius: 0px;
 }
 
 .content {
@@ -41,7 +53,6 @@ hr{
 }
 #logout,#show-post{
     min-height:20px;
-    margin-top:25px;
     background-color: #0768c9;
  }
 #rows{
@@ -72,4 +83,7 @@ a:hover{
 }
 .forum-post{
     display: none;
+}
+#logout{
+    margin-right:0px;
 }

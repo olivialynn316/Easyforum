@@ -45,6 +45,7 @@ app.use('/editPost', users);
 app.use('/replyinitialize', users);
 app.use('/replyposter', users);
 app.use('/content/:summary', users);
+app.use('/delete/:id', users);
 
 
 // catch 404 and forward to error handler

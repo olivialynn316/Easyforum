@@ -193,11 +193,12 @@ router.get('/edit/:summary',function(req, res) {
 });
 router.get('/content/:summary',function(req, res) {
     var summary = req.params.summary;
+    var account = req.session.user.account;
     Forum.findOne({"summary":summary}, function(err, doc){
         if(err) {
             res.redirect('/forum');
         } else {
-            res.render("forum_detail",{summary:summary,content:doc.content, account:doc.account});
+            res.render("forum_detail",{summary:summary,content:doc.content, author:doc.account, account: account});
         }
     });
 });
@@ -228,6 +229,27 @@ router.get('/delete/:summary',function(req, res) {
             console.log(err);
         }
         res.redirect('/forum');
+    });
+});
+router.post('/delete/:id',function(req, res) {
+    var id = req.params.id;
+    var summary = req.body.summary;
+    var json="";
+    console.log(id);
+    console.log(summary);
+    Reply.remove({"_id":id}, function(err, doc){
+        if(err) {
+            console.log(err);
+            json = {"status": 100}; //错误标志
+            res.send(json);
+            res.end();
+        }
+        else {
+            json = {"status": 30};
+            //保存成功标志
+            res.send(json);
+            res.end();
+        }
     });
 });
 module.exports = router;

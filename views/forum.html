@@ -11,13 +11,16 @@
 </head>
 
 <body>
-<h1>Welcome, <%= account %></h1>
-<div class="right-btn">
+<div class="buttons">
+    <h1>Welcome, <%= account %></h1>
+    <div class="left-btn">
     <button class="btn" type="submit" id="show-post">提问</button>
 </div>
-<div class="right-btn">
-    <button class="btn" type="submit" id="logout">登出</button>
+    <div class="left-btn">
+        <button class="btn" type="submit" id="logout">登出</button>
+    </div>
 </div>
+<div class="clear"></div>
 <div class="forum-post">
     <div class="div-s1">
         <input type="text" id="summary" required="required" class="summary" name="summary" placeholder="请输入标题"/>
@@ -42,6 +45,22 @@
     $(function () {
         initialize();
     });
+
+    function doDelete(summary) {
+        swal({
+            title:"",
+            text:"确定删除吗？",
+            type:"warning",
+            showCancelButton:"true",
+            showConfirmButton:"true",
+            confirmButtonText:"确定",
+            cancelButtonText:"取消",
+            animation:"slide-from-top"
+        }, function() {
+            location.href = "delete/" + summary;
+         });
+    }
+
     // 初始化帖子数据
     function initialize() {
         $.ajax({
@@ -66,8 +85,8 @@
                         if (item.account == account)
                              s+="\
                                 <div class = 'btn2'>\
-                                    <a id='edit' href='/edit/"+ item.summary + "'>编辑</a>\
-                                    <a id='delete' href='/delete/" + item.summary + "'>删除</a>\
+                                    <a class='edit' href='/edit/"+ item.summary + "'>编辑</a>\
+                                    <a class='delete' href='javascript:void(0)' onclick=\"doDelete('" + item.summary + "')\" >删除</a>\
                                 </div>";
                         s+= "<hr id='hr1'/>\
                             </div>";
@@ -162,6 +181,7 @@
             e.preventDefault();
             location.href = "login";
         });
+
     }
 </script>
 </body>

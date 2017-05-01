@@ -13,9 +13,49 @@
             initialize();
 
         });
+        function doDelete(id, summary) {
+            swal({
+                title:"",
+                text:"确定删除吗？",
+                type:"warning",
+                showCancelButton:"true",
+                showConfirmButton:"true",
+                confirmButtonText:"确定",
+                cancelButtonText:"取消",
+                animation:"slide-from-top"
+            }, function() {
+                var Fsummary = {"summary": summary};
+                $.ajax({
+                    url:'/delete/'+id,
+                    type:'post',
+                    data: Fsummary,
+                    datatype:"json",
+                    success: function(data){
+                        if (data.status == '30') {
+                                location.reload();
+                        } else  {
+                            swal({
+                                title: "",
+                                text: "删除失败",
+                                type: "warning",
+                                showConfirmButton: false,
+                                width: 300,
+                                padding: 10,
+                                background: "#F5F5F5",
+                                timer: 1000
+                            });
+                        }
+                    },
+                    error: function(data) {
+                    }
+                });
+               // location.href = "/delete/" + id;
+            });
+        }
         function initialize() {
             var summary = $("#sum").val();
             var content = $("#con").val();
+            var author = $("#aut").val();
             var account = $("#acc").val();
             console.log(summary);
             var ForumSummary = {"summary": summary};
@@ -26,16 +66,27 @@
                 dataType: "json",
                 success: function(data){
                     if(data != null){
+                        var n=0;
                         data.forEach(function(item){
+                            n=n+1;
                             var s = "";
                             s += "\
                             <div class='forum-info'>\
-                                <div class = 'forum-account'>" +
+                                <div class = 'reply-account'>" +
                                 item.account +
                                 "</div>\
+                                <div class = 'reply-num'>" +
+                                n + "楼" +
+                                "</div>\
+                                <div class='clear'></div>\
                                 <div class = 'forum-content'>" +
                                 item.reply +
                                 "</div>";
+                            if (item.account == account)
+                            s+="\
+                                <div class = 'btn2'>\
+                                    <a class='delete' href='javascript:void(0)' onclick=\"doDelete('" + item._id + "','" + item.summary + "')\" >删除</a>\
+                                </div>";
                             s+= "<hr id='hr1'/>\
                             </div>";
                             $('#reply_list').append(s);
@@ -118,9 +169,10 @@
 <body>
 <input type="hidden" id="sum" value= "<%= summary %>" />
 <input type="hidden" id="con" value= "<%= content %>" />
+<input type="hidden" id="aut" value= "<%= author %>" />
 <input type="hidden" id="acc" value= "<%= account %>" />
-<div id="theme"><%= summary%> </br></br></div>
-<div id="author"><%= account%></div>
+<div id="theme"><%= summary%></div>
+<div id="author">作者：<%= author%></div>
 <div id="article">
     <%= content%>
 </div>
