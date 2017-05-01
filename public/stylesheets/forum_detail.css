@@ -1,4 +1,4 @@
-#forum {
+#forum_detail {
     width: 33%;
     height: 300px;
     top: 50%;
@@ -18,14 +18,20 @@ h1 {
     font-size: 2em;
 }
 
-.summary {
-    width: 35%;
-    background-color: #ffffff;
+#theme{
+    color: #0768c9;
+    letter-spacing: 1px;
+    font-size: 1.5em;
+    width:35%;
+    margin:0 auto;
 }
-
+#article{
+    width:35%;
+    margin:0 auto;
+}
 .content {
     width: 35%;
-    min-height: 220px;
+    min-height: 150px;
     z-index: 0;
 }
 hr{
@@ -34,22 +40,10 @@ hr{
 #hr1{
     width:100%;
 }
-.forum-btn {
-    width: 80px;
-    text-align: center;
-    margin: 0 auto;
-}
-#logout,#show-post{
-    min-height:20px;
-    margin-top:25px;
-    background-color: #0768c9;
- }
-#rows{
+
+#reply_list{
     width:35%;
     margin:0 auto;
-}
-.forum-info:hover{
-    background-color: #ededed;
 }
 a{
     width:100%;
@@ -58,9 +52,7 @@ a{
     font-weight: bold;
     font-size: 15px;
 }
-a:hover{
-    text-decoration: underline;
-}
+
 .forum-account{
     font-weight: bold;
     margin-top: 10px;
@@ -70,6 +62,9 @@ a:hover{
     color: #236cb6;
     font-size:12px;
 }
-.forum-post{
-    display: none;
+#author{
+    font-weight: bold;
+    width: 35%;
+    margin: 0 auto;
 }
+

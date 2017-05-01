@@ -17,9 +17,18 @@ var UserInfo = new mongoose.Schema({
     {collection: "user_info"}
 );
 
+var ForumReply = new mongoose.Schema({
+        summary: String,
+        account:String,
+        reply: String
+    },
+    {collection: "forum_reply"}
+);
+
 var module_collection = {
     "UserInfo":UserInfo,
-    "ForumContent":ForumContent
+    "ForumContent":ForumContent,
+    "ForumReply":ForumReply
 }
 
 module.exports = module_collection;

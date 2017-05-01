@@ -42,6 +42,10 @@ app.use('/poster', users);
 app.use('/edit/:summary', users);
 app.use('/delete/:summary', users);
 app.use('/editPost', users);
+app.use('/replyinitialize', users);
+app.use('/replyposter', users);
+app.use('/content/:summary', users);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

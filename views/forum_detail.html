@@ -3,46 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-    <script type="text/javascript" src="javascripts/jquery.tmpl.min.js"></script>
-    <script type="text/javascript" src="javascripts/sweetalert.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="stylesheets/sweetalert.css"/>
-    <link rel="stylesheet" type="text/css" href="stylesheets/base.css"/>
-    <link rel="stylesheet" type="text/css" href="stylesheets/forum.css"/>
+    <script type="text/javascript" src="/javascripts/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/sweetalert.css"/>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/base.css"/>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/forum_detail.css"/>
     <title>Title</title>
-    <script id="forumTemplate" type="text/x-jquery-tmpl">
-        <tr><td><a href="/content?summary="+ ${summary}s>${summary}</a></td><td>${content}</td><td>${account}</td></tr>
-    </script>
     <script type="text/javascript">
         $(function () {
             initialize();
 
         });
-
-        // 初始化帖子数据
         function initialize() {
+            var summary = $("#sum").val();
+            var content = $("#con").val();
+            var account = $("#acc").val();
+            console.log(summary);
+            var ForumSummary = {"summary": summary};
             $.ajax({
-                url:'/initialize',
+                url:'/replyinitialize',
                 type:'post',
+                data: ForumSummary,
                 dataType: "json",
                 success: function(data){
-                    if(data != null) {
-                        console.log(data);
-                        // 填充帖子模板
-                        $('#forumTemplate').tmpl(data).appendTo('#rows');
+                    if(data != null){
+                        data.forEach(function(item){
+                            var s = "";
+                            s += "\
+                            <div class='forum-info'>\
+                                <div class = 'forum-account'>" +
+                                item.account +
+                                "</div>\
+                                <div class = 'forum-content'>" +
+                                item.reply +
+                                "</div>";
+                            s+= "<hr id='hr1'/>\
+                            </div>";
+                            $('#reply_list').append(s);
+                        });
                     }
                 },
                 error: function(data) {
-                },
+                }
             });
-
-            $('#poster').click(function (e) {
+            $('#replyposter').click(function (e) {
                 e.preventDefault();
-                var summary = $("#summary").val();
-                var content = $("#content").val();
-                if(summary == null || summary == '') {
+                var reply = $("#reply").val();
+                if(reply == null || reply == '') {
                     swal({
                         title: "",
-                        text: "请输入标题",
+                        text: "请输入内容",
                         type: "warning",
                         showConfirmButton: false,
                         width: 300,
@@ -50,12 +59,15 @@
                         background: "#F5F5F5",
                         timer: 1000
                     });
+                    return;
                 }
-                var forumContent = {"summary": summary, "content": content};
+                var replyContent = {"reply":reply, "summary":summary};
+                console.log("aaa");
+                console.log(summary);
                 $.ajax({
-                    url: '/poster',
+                    url: '/replyposter',
                     type: 'post',
-                    data: forumContent,
+                    data: replyContent,
                     success: function (data) {
                         if (data.status == '30') {
                             swal({
@@ -67,18 +79,7 @@
                             }, function () {
                                 location.reload();
                             });
-                        } else if (data.status == '20') {
-                            swal({
-                                title: "",
-                                text: "标题重复",
-                                type: "warning",
-                                showConfirmButton: false,
-                                width: 300,
-                                padding: 10,
-                                background: "#F5F5F5",
-                                timer: 1000
-                            });
-                        } else {
+                        }  else {
                             swal({
                                 title: "",
                                 text: "发表失败",
@@ -105,34 +106,36 @@
                     }
                 });
             });
+            $('#logout').click(function (e) {
+                e.preventDefault();
+                location.href = "../forum";
+            });
 
         }
     </script>
 </head>
 
 <body>
-<h1>嘿嘿嘿</h1>
-<div>
-    <table cellspacing="0" cellpadding="3">
-        <tbody id="rows">
-        <tr>
-            <th>标题</th><th>内容</th><th>发帖人</th>
-        </tr>
-        </tbody>
-    </table>
+<input type="hidden" id="sum" value= "<%= summary %>" />
+<input type="hidden" id="con" value= "<%= content %>" />
+<input type="hidden" id="acc" value= "<%= account %>" />
+<div id="theme"><%= summary%> </br></br></div>
+<div id="author"><%= account%></div>
+<div id="article">
+    <%= content%>
 </div>
-
-<div class="forum-post">
+<hr/>
+<div id="reply_list">
+</div>
+<div class="div-s1">
     <div class="div-s1">
-        <label class="label-s1">标题:</label>
-        <input type="text" id="summary" required="required" class="summary" name="summary" placeholder="请输入标题"/>
+        <textarea type="text" id="reply" name="reply" class="content" placeholder="请输入回复..."></textarea>
     </div>
-    <div class="div-s1">
-        <label class="label-s1">内容:</label>
-        <input type="text" id="content" name="content" class="content"/>
+    <div class="left-btn">
+        <button class="btn" type="submit" id="replyposter">发表</button>
     </div>
-    <div class="forum-btn">
-        <button class="btn" type="submit" id="poster">发表</button>
+    <div class="right-btn">
+        <button class="btn" type="submit" id="logout">返回</button>
     </div>
 </div>
 </body>

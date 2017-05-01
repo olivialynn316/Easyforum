@@ -13,6 +13,9 @@
 <body>
 <h1>Welcome, <%= account %></h1>
 <div class="right-btn">
+    <button class="btn" type="submit" id="show-post">提问</button>
+</div>
+<div class="right-btn">
     <button class="btn" type="submit" id="logout">登出</button>
 </div>
 <div class="forum-post">
@@ -27,8 +30,8 @@
             <button class="btn" type="submit" id="poster">发表</button>
         </div>
     </div>
+    <hr/>
 </div>
-<hr/>
 <div id="rows">
 </div>
 <input type="hidden" id="account" value= <%= account %> />
@@ -75,6 +78,12 @@
             error: function(data) {
             }
         });
+
+        $('#show-post').click(function (e) {
+            e.preventDefault();
+            $(".forum-post").toggle();
+        });
+
 
         $('#poster').click(function (e) {
             e.preventDefault();
@@ -147,6 +156,7 @@
                 }
             });
         });
+
 
         $('#logout').click(function (e) {
             e.preventDefault();
